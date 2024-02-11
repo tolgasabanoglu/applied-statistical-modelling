@@ -6,7 +6,7 @@ output: html_document
 
 ---
 
-libraries
+libraries 
 ```{r}
 
 library(patchwork)
