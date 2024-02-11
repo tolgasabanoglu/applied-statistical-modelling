@@ -1,20 +1,5 @@
----
-title: "Assignment 4"
-author: "Tolga Şabanoğlu"
-date: "2023-05-18"
-output:
-  html_document: default
-  pdf_document: default
----
-
-
-* yi ∼ Normal(μ, σ)
-* μ ∼ Normal(0, 10) 
-* σ ∼ Exponential(1)
-
-__4E3. Using the model definition above, write down the appropriate form of Bayes’ theorem that includes the proper likelihood and priors__
-
-```{r, 4E3}
+# 4E3
+# Using the model definition above, write down the appropriate form of Bayes’ theorem that includes the proper likelihood and priors
 
 likelihood <- yi ~ dnorm(mu, sigma)
 prior_mu <- mu ~ dnorm(0, 10)
@@ -22,17 +7,9 @@ prior_sigma <- sigma ~ dexp(1)
 
 bayes_theorem <- expression(likelihood * prior_mu * prior_sigma)
 
+# 4M1
+# For the model definition below, simulate observed y values from the prior (not the posterior)
 
-```
-
-__4M1. For the model definition below, simulate observed y values from the prior (not the posterior)__
-
-* yi ∼ Normal(μ, σ) 
-* μ ∼ Normal(0, 10) 
-* σ ∼ Exponential(1)
-
-
-```{r}
 num_obs <- 10000
 
 # Step 1: Simulate values for μ and σ from the priors
@@ -43,18 +20,15 @@ num_obs <- 10000
 y_values <- rnorm(num_obs, μ_0, σ_0)
 
 # Plotting the density of simulated observed y values
-density_y <- density(y_values)
-plot(density_y, main = "Density of Simulated Observed y Values")
+plot(density(y_values), main = "Density of Simulated Observed y Values", xlab = "y", ylab = "Density")
 
+# 4H2
+# Select out all the rows in the Howell1 data with ages below 18 years of age.
+# If you do it right, you should end up with a new data frame with 192 rows in it
 
-```
-
-__4H2. Select out all the rows in the Howell1 data with ages below 18 years of age. If you do it right, you should end up with a new data frame with 192 rows in it__
-
-__(a) Fit a linear regression to these data, using quap. Present and interpret the estimates. For every 10 units of increase in weight, how much taller does the model predict a child gets?__
-
-
-```{r, warning = FALSE, results= "hide", message = FALSE}
+# (a) Fit a linear regression to these data, using quap.
+# Present and interpret the estimates. For every 10 units of increase in weight,
+# how much taller does the model predict a child gets?
 
 library(rethinking)
 library(brms)
@@ -73,15 +47,9 @@ model <- brm(height ~ weight, data = below_18_df)
 # Summarize the model estimates
 summary(model)
 
-```
-* The estimate indicates that the coefficient weight is 2.7, which means that for every 1 kg of change, a 2.7 cm increase in height is observed. Therefore, for every 10 kg of weight increase, the child's height increases by 27 cm
-
-
-
-__(b) Plot the raw data, with height on the vertical axis and weight on the horizontal axis. Superimpose the MAP regression line and 89% interval for the mean. Also superimpose the 89% interval for predicted heights__
-
-
-``` {r, warning=FALSE,results= "hide",message=FALSE}
+# (b) Plot the raw data, with height on the vertical axis and weight on the horizontal axis.
+# Superimpose the MAP regression line and 89% interval for the mean.
+# Also superimpose the 89% interval for predicted heights
 
 library(ggplot2)
 library(brms)
@@ -112,10 +80,3 @@ ggplot(Howell1, aes(x = weight, y = height)) +
   ggtitle("Howell1 Data with MAP Regression Line and 89% Prediction Interval") +
   theme_minimal()
 
-
-```
-
-__(c) What aspects of the model fit concern you? Describe the kinds of assumptions you would change, if any, to improve the model. You don’t have to write any new code. Just explain what the model appears to be doing a bad job of, and what you hypothesize would be a better model__
-
-* Relationship between small amount of weights and heights is not linear
-* There are some uncertainties associated with high weight values 
